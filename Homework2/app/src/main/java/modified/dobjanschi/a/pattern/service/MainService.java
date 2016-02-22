@@ -3,10 +3,7 @@ package modified.dobjanschi.a.pattern.service;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.os.IBinder;
-import android.os.ResultReceiver;
-import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -16,12 +13,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import modified.dobjanschi.a.pattern.MainActivity;
+import modified.dobjanschi.a.pattern.activity.MainActivity;
 import modified.dobjanschi.a.pattern.api.API;
-import modified.dobjanschi.a.pattern.db.DatabaseUtils;
 import modified.dobjanschi.a.pattern.db.tables.RequestsTable;
 import modified.dobjanschi.a.pattern.service.model.RequestItem;
-import modified.dobjanschi.a.pattern.service.model.Vacancy;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -34,14 +29,7 @@ public class MainService extends Service {
 
     private final String TAG = "MainService";
 
-    public static final int STATUS_RUNNING = 0;
-    public static final int STATUS_FINISHED = 1;
-    public static final int STATUS_ERROR = 2;
-
-   // private VacanicesRepository mVacancyRepository;
-
     public static void start(@NonNull Context context) {
-        // start a new server request.
         context.startService(new Intent(context, MainService.class));
     }
 
@@ -54,23 +42,23 @@ public class MainService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d(MainService.class.getName(), "service started...");
-        Toast.makeText(MainService.this, "Service started", Toast.LENGTH_SHORT).show();
+        final RequestItem requestItem = RequestsTable.getNewItem(getBaseContext());
 
+        Toast.makeText(MainService.this, "Service started to work", Toast.LENGTH_SHORT).show();
 
-            RestAdapter restAdapter = new RestAdapter.Builder()
+        RestAdapter restAdapter = new RestAdapter.Builder()
                 .setEndpoint(MainActivity.HH_URL)
                     .build();
 
-           /* mVacancyRepository = new VacanicesRepository(getApplicationContext());
-            mVacancyRepository.dropTable();*/
+        requestItem.setStatus(MainActivity.STATUS_IN_PROGRESS);
+        RequestsTable.update(getBaseContext(), requestItem);
 
-            API rest_api = restAdapter.create(API.class);
-            rest_api.getVacancies(MainActivity.VACANCY_NAME, MainActivity.VACANCY_AREA, new retrofit.Callback<Response>() {
-                @Override
-                public void success(Response v, Response response2) {
+        API rest_api = restAdapter.create(API.class);
+        rest_api.getVacancies(MainActivity.VACANCY_NAME, MainActivity.VACANCY_AREA, new retrofit.Callback<Response>() {
 
-                        RequestItem requestItem = new RequestItem("request1");
+            @Override
+            public void success(Response v, Response response2) {
+
                         TypedInput body = v.getBody();
                         String line = "";
 
@@ -78,12 +66,14 @@ public class MainService extends Service {
                             BufferedReader reader = new BufferedReader(new InputStreamReader(body.in()));
                             line = reader.readLine();
                             Log.d(TAG, line);
-                            Toast.makeText(getBaseContext(), line, Toast.LENGTH_SHORT).show();
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
 
                         requestItem.setResponse(line);
+                        requestItem.setStatus("RECEIVED");
+                        Toast.makeText(MainService.this, "Server recived response", Toast.LENGTH_SHORT).show();
+
                         RequestsTable.clear(getBaseContext());
                         RequestsTable.save(getBaseContext(), requestItem);
                         getBaseContext().getContentResolver().notifyChange(RequestsTable.URI, null);
@@ -91,9 +81,11 @@ public class MainService extends Service {
 
                 }
 
-                @Override
-                public void failure(RetrofitError error) {
-                    Log.d(TAG, error.getMessage());
+            @Override
+            public void failure(RetrofitError error) {
+                    String message = error.getMessage();
+                    Log.d(TAG, message);
+                    Toast.makeText(MainService.this, message, Toast.LENGTH_SHORT).show();
                 }
             });
 

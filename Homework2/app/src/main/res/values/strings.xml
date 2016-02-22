@@ -2,4 +2,5 @@
     <string name="app_name">Pattern A</string>
     <string name="error">Error</string>
     <string name="retry">Retry</string>
+    <string name="do_it">Do it!</string>
 </resources>
