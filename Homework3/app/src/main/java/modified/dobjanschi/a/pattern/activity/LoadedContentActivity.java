@@ -38,6 +38,7 @@ public class LoadedContentActivity extends AppCompatActivity {
     private Vacancy mVacancy;
     private List<Vacancy.Item> mVacancyList;
     private View throbberView;
+    private TextView tvError;
 
     public static void start(Activity activity) {
         ActivityCompat.startActivity(activity, new Intent(activity, LoadedContentActivity.class), null);
@@ -51,6 +52,8 @@ public class LoadedContentActivity extends AppCompatActivity {
         vacanciesRecycleView = (RecyclerView) findViewById(R.id.vacancies_list_recycler_view);
         vacanciesRecycleView.setLayoutManager(new LinearLayoutManager(getBaseContext()));
         throbberView = findViewById(R.id.throbber_layout);
+        tvError = (TextView) findViewById(R.id.tv_error);
+        tvError.setEnabled(false);
         showThrobber(true);
 
         mVacancyList = new ArrayList<Vacancy.Item>();
@@ -66,31 +69,38 @@ public class LoadedContentActivity extends AppCompatActivity {
 
         Cursor cursor = getContentResolver().query(RequestsTable.URI, null, null, null, null);
         if (cursor != null && cursor.moveToFirst()) {
-            String json = cursor.getString(cursor.getColumnIndex(RequestItemContract.RequestColumns.RESPONSE));
 
-            GsonBuilder builder = new GsonBuilder();
-            Gson gson = builder.create();
-
-            mVacancy = gson.fromJson(json, Vacancy.class);
-            for (Vacancy.Item i : mVacancy.items) {
-                Log.d("TAG", i.name);
-                Log.d("TAG", i.employer.name);
-                try {
-                    Log.d("TAG", i.snippet.requirement);
-                } catch (java.lang.NullPointerException e) {
-                    i.snippet.requirement = "None";
-                }
-                try {
-                    Log.d("TAG", i.snippet.responsibility);
-                } catch (java.lang.NullPointerException e) {
-                    i.snippet.responsibility = "None";
-                }
-
-                mVacancyList.add(i);
-            }
-            mAdapter = new VacanciesAdapter(mVacancyList);
+            String status = cursor.getString(cursor.getColumnIndex(RequestItemContract.RequestColumns.STATUS));
             showThrobber(false);
-            vacanciesRecycleView.setAdapter(mAdapter);
+
+            if (!status.equals(MainActivity.STATUS_ERROR)){
+                String json = cursor.getString(cursor.getColumnIndex(RequestItemContract.RequestColumns.RESPONSE));
+                GsonBuilder builder = new GsonBuilder();
+                Gson gson = builder.create();
+
+                mVacancy = gson.fromJson(json, Vacancy.class);
+                for (Vacancy.Item i : mVacancy.items) {
+                    Log.d("TAG", i.name);
+                    Log.d("TAG", i.employer.name);
+                    try {
+                        Log.d("TAG", i.snippet.requirement);
+                    } catch (java.lang.NullPointerException e) {
+                        i.snippet.requirement = "None";
+                    }
+                    try {
+                        Log.d("TAG", i.snippet.responsibility);
+                    } catch (java.lang.NullPointerException e) {
+                        i.snippet.responsibility = "None";
+                    }
+
+                    mVacancyList.add(i);
+                }
+                mAdapter = new VacanciesAdapter(mVacancyList);
+                vacanciesRecycleView.setAdapter(mAdapter);
+            }else {
+                tvError.setEnabled(true);
+            }
+
             getContentResolver().delete(RequestsTable.URI, RequestItemContract.RequestColumns.STATUS + "=?",
                     new String[]{MainActivity.STATUS_RECEIVED});
             cursor.close();

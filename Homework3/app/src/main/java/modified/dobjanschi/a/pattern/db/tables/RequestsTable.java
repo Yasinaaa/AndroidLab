@@ -37,7 +37,7 @@ public class RequestsTable {
 
     public static void update(Context context, @NonNull RequestItem requestItem) {
         context.getContentResolver().update(URI, toContentValues(requestItem),
-                RequestItemContract.RequestColumns.STATUS  + "=?", new String[]{requestItem.getStatus()});
+                RequestItemContract.RequestColumns.STATUS + "=?", new String[]{requestItem.getStatus()});
     }
 
     @NonNull
@@ -59,11 +59,11 @@ public class RequestsTable {
 
 
     @NonNull
-    public static RequestItem getNewItem(Context context) {
+    public static RequestItem getItem(Context context, String status) {
         Cursor cursor = context.getContentResolver().query(URI,
                 COLUMNS_PROJECTION,
                 RequestItemContract.RequestColumns.STATUS + "=?",
-                new String[]{MainActivity.STATUS_NEW},
+                new String[]{status},
                 null);
         RequestItem requestItem;
         boolean stop = false;
@@ -73,7 +73,7 @@ public class RequestsTable {
         try {
             do {
                 requestItem = fromCursor(cursor);
-                if (requestItem.getStatus().equals("NEW")){
+                if (requestItem.getStatus().equals(status)){
                     stop = true;
                     return requestItem;
                 }
@@ -83,6 +83,8 @@ public class RequestsTable {
             DatabaseUtils.safeCloseCursor(cursor);
         }
     }
+
+
 
   /*  @NonNull
     public static List<RequestItem> listFromCursor(@NonNull Cursor cursor) {

@@ -21,8 +21,9 @@ public class MainActivity extends AppCompatActivity {
     public static final int VACANCY_AREA = 88;
 
     public static final String STATUS_NEW = "NEW";
-    public static final String STATUS_IN_PROGRESS = "N_PROGRESS";
+    public static final String STATUS_IN_PROGRESS = "IN_PROGRESS";
     public static final String STATUS_RECEIVED = "RECEIVED";
+    public static final String STATUS_ERROR = "ERROR";
 
 
     public IntentServiceResultReceiver receiver;
