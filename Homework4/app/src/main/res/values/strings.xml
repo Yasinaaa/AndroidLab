@@ -23,7 +23,7 @@
     <string name="navigator_drawer_item_main">Main</string>
     <string name="navigator_drawer_item_tabs">Tabs</string>
     <string name="navigator_drawer_item_map">Map</string>
+    <string name="item_recycler_view">Information_Item</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>

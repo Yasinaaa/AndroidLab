@@ -1,6 +1,9 @@
 package itis.ru.homework4.fragments;
 
+import android.app.DialogFragment;
 import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -30,7 +33,8 @@ import itis.ru.homework4.model.Item;
 /**
  * Created by yasina on 06.03.16.
  */
-public class MainFragment extends Fragment {
+public class MainFragment extends Fragment implements RecyclerViewAdapter.OnItemClickListener {
+
 
     private final String TAG = "MainFragment";
     private View view;
@@ -130,7 +134,7 @@ public class MainFragment extends Fragment {
         mItemsList.add(new Item("Item8", "It was beautiful day!"));
         mItemsList.add(new Item("Item9", "It was beautiful day!"));
 
-        mRecyclerViewAdapter = new RecyclerViewAdapter(mItemsList);
+        mRecyclerViewAdapter = new RecyclerViewAdapter(getActivity(), mItemsList);
         vh.recyclerView.setAdapter(mRecyclerViewAdapter);
     }
 
@@ -172,5 +176,12 @@ public class MainFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    @Override
+    public void onItemClick(View view, Item viewModel) {
+        FragmentManager fm = getFragmentManager();
+       // DialogFragment dialogFragment = RecyclerViewItemFragment.newInstance();
+        //dialogFragment.show(fm, "Sample Fragment");
     }
 }
