@@ -2,6 +2,7 @@ package itis.ru.homework4.activities;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -28,6 +29,8 @@ public class MainActivity extends AppCompatActivity
     private Fragment fragment;
     private String tag;
     public static  DrawerLayout drawer;
+    private FragmentTransaction mFragmentTransaction;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,9 +39,8 @@ public class MainActivity extends AppCompatActivity
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
-        fragment = new MainFragment();
-        tag = getResources().getString(R.string.navigator_drawer_item_main);
-        replaceFragment(fragment, R.id.nav_menu, tag);
+        mFragmentTransaction = getFragmentManager().beginTransaction();
+        replaceFragment(MainFragment.newInstance(),getResources().getString(R.string.navigator_drawer_item_main));
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -82,29 +84,29 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
+
         if (id == R.id.nav_menu) {
-            fragment = new MainFragment();
+            fragment = MainFragment.newInstance();
             tag = getResources().getString(R.string.navigator_drawer_item_main);
         } else if (id == R.id.nav_tabs) {
-            fragment = new TabsFragment();
+            fragment = TabsFragment.newInstance();
             tag = getResources().getString(R.string.navigator_drawer_item_tabs);
         } else if (id == R.id.nav_maps) {
-            fragment = new MapFragment();
+            fragment = TabsFragment.newInstance();
             tag = getResources().getString(R.string.navigator_drawer_item_map);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
-        replaceFragment(fragment, id, tag);
+        replaceFragment(fragment, tag);
         return true;
     }
 
-    private void replaceFragment(Fragment fragment, int currentFragment, String tag){
-        if (fragment != null) {
-            FragmentManager fragmentManager = getFragmentManager();
-            fragmentManager.beginTransaction()
-                    .replace(R.id.content_frame, fragment, tag).commit();
-
-        }
+    private void replaceFragment(Fragment fragment,  String tag){
+        mFragmentTransaction = getFragmentManager().beginTransaction();
+        mFragmentTransaction.replace(R.id.content_frame, fragment,
+                tag);
+        mFragmentTransaction.addToBackStack(null);
+        mFragmentTransaction.commit();
     }
 }

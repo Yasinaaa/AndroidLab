@@ -2,6 +2,7 @@ package itis.ru.homework4.fragments;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -35,6 +36,7 @@ public class MainFragment extends Fragment {
     private View view;
     private Context mContext;
     private RecyclerViewAdapter mRecyclerViewAdapter;
+    private OnFragmentInteractionListener mListener;
 
     private class ViewHolder{
         FloatingActionButton fab;
@@ -49,18 +51,26 @@ public class MainFragment extends Fragment {
     private int scrolledDistance = 0;
     private boolean controlsVisible = true;
 
+    public static MainFragment newInstance() {
+        MainFragment fragment = new MainFragment();
+        return fragment;
+    }
+
+    private MainFragment(){
+
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_main, container, true);
+        view = inflater.inflate(R.layout.fragment_main, container, false);
         mContext = getActivity().getBaseContext();
         setHasOptionsMenu(true);
         vh = new ViewHolder();
         initView();
         setAdapter();
-        return super.onCreateView(inflater, container, savedInstanceState);
+        return view;
     }
-
 
 
     private void initView(){
@@ -135,5 +145,32 @@ public class MainFragment extends Fragment {
     private void showViews() {
         vh.toolbar.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
        // vh.fab.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
+    }
+
+    public void onButtonPressed(Uri uri) {
+        if (mListener != null) {
+            mListener.onFragmentInteraction(uri);
+        }
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnFragmentInteractionListener) {
+            mListener = (OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+    public interface OnFragmentInteractionListener {
+        // TODO: Update argument type and name
+        void onFragmentInteraction(Uri uri);
     }
 }
