@@ -24,6 +24,8 @@
     <string name="navigator_drawer_item_tabs">Tabs</string>
     <string name="navigator_drawer_item_map">Map</string>
     <string name="item_recycler_view">Information_Item</string>
+    <string name="tab_1">Tab1</string>
+    <string name="tab_2">Tab2</string>
 
 
 </resources>

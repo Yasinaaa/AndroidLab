@@ -5,6 +5,10 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentSender;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,12 +19,25 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.squareup.picasso.Downloader;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +50,7 @@ import itis.ru.homework4.model.Item;
 /**
  * Created by yasina on 06.03.16.
  */
-public class MainFragment extends Fragment implements RecyclerViewAdapter.OnItemClickListener {
+public class MainFragment extends Fragment implements RecyclerViewAdapter.OnItemClickListener{
 
 
     private final String TAG = "MainFragment";
@@ -41,6 +58,7 @@ public class MainFragment extends Fragment implements RecyclerViewAdapter.OnItem
     private Context mContext;
     private RecyclerViewAdapter mRecyclerViewAdapter;
     private OnFragmentInteractionListener mListener;
+
 
     private class ViewHolder{
         FloatingActionButton fab;
@@ -184,4 +202,6 @@ public class MainFragment extends Fragment implements RecyclerViewAdapter.OnItem
        // DialogFragment dialogFragment = RecyclerViewItemFragment.newInstance();
         //dialogFragment.show(fm, "Sample Fragment");
     }
+
+
 }

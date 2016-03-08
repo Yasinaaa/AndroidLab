@@ -45,11 +45,7 @@ public class RecyclerViewItemFragment extends DialogFragment {
     private CollapsingToolbarLayout collapsingToolbarLayout;
     private OnFragmentInteractionListener mListener;
 
-    public static void navigate() {
 
-      //  ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, transitionImage, EXTRA_IMAGE);
-        //ActivityCompat.startActivity(activity, intent, options.toBundle());
-    }
 
     public static RecyclerViewItemFragment newInstance() {
         RecyclerViewItemFragment fragment = new RecyclerViewItemFragment();
@@ -72,7 +68,7 @@ public class RecyclerViewItemFragment extends DialogFragment {
         initActivityTransitions();
         View rootView = inflater.inflate(R.layout.dialog_detail, container, false);
        // getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-        ViewCompat.setTransitionName(rootView.findViewById(R.id.app_bar_layout), "http://lorempixel.com/500/500/animals/3");
+     //   ViewCompat.setTransitionName(rootView.findViewById(R.id.app_bar_layout), "http://lorempixel.com/500/500/animals/3");
         //supportPostponeEnterTransition();
 
         Toolbar toolbar = (Toolbar) rootView.findViewById(R.id.toolbar);

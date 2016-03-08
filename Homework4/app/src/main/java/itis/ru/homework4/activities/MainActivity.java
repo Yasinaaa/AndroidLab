@@ -1,11 +1,16 @@
 package itis.ru.homework4.activities;
 
 import android.app.Fragment;
-import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentSender;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -17,13 +22,32 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.squareup.okhttp.Callback;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
+
+import java.io.IOException;
+import java.util.ArrayList;
+
 import itis.ru.homework4.R;
 import itis.ru.homework4.fragments.MainFragment;
-import itis.ru.homework4.fragments.MapFragment;
+import itis.ru.homework4.fragments.MapTaskFragment;
 import itis.ru.homework4.fragments.TabsFragment;
+import itis.ru.homework4.server.Place;
+import itis.ru.homework4.server.PlaceAPI;
+import itis.ru.homework4.server.ServerBuilder;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener{
 
     private final String TAG = "MainActivity";
     private Fragment fragment;
@@ -31,11 +55,14 @@ public class MainActivity extends AppCompatActivity
     public static  DrawerLayout drawer;
     private FragmentTransaction mFragmentTransaction;
 
+    public static FragmentManager fragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        fragmentManager = getSupportFragmentManager();
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
@@ -44,6 +71,7 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
     }
 
     @Override
@@ -88,11 +116,13 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_menu) {
             fragment = MainFragment.newInstance();
             tag = getResources().getString(R.string.navigator_drawer_item_main);
+
         } else if (id == R.id.nav_tabs) {
             fragment = TabsFragment.newInstance();
             tag = getResources().getString(R.string.navigator_drawer_item_tabs);
+
         } else if (id == R.id.nav_maps) {
-            fragment = TabsFragment.newInstance();
+            fragment = MapTaskFragment.newInstance();
             tag = getResources().getString(R.string.navigator_drawer_item_map);
         }
 
@@ -109,4 +139,6 @@ public class MainActivity extends AppCompatActivity
         mFragmentTransaction.addToBackStack(null);
         mFragmentTransaction.commit();
     }
+
+
 }
