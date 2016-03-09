@@ -16,10 +16,8 @@ android {
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
-        manifestPlaceholders = [
-                googleApiKey: "AIzaSyAIjijO8ivXcS9RKZuF2gyKQUDXXkvTOu4",
-                debugMode: false
-        ]
+        generatedDensities = []
+
     }
     buildTypes {
         release {
@@ -42,4 +40,6 @@ dependencies {
     compile 'com.google.maps.android:android-maps-utils:0.4+'
     compile 'com.squareup.okhttp:okhttp:2.5.0'
     compile 'com.github.jd-alexander:library:1.0.6'
+
+
 }

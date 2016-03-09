@@ -112,14 +112,7 @@ public class MainFragment extends Fragment implements RecyclerViewAdapter.OnItem
             }
         });
 
-        vh.fab = (FloatingActionButton) view.findViewById(R.id.fab);
-        vh.fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+
         vh.toolbar = (Toolbar) view.findViewById(R.id.toolbar);
         vh.toolbar.setTitle(getResources().getString(R.string.navigator_drawer_item_main));
         ((AppCompatActivity)getActivity()).setSupportActionBar(vh.toolbar);

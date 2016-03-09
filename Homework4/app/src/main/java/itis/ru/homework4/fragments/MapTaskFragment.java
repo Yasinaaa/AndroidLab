@@ -8,7 +8,9 @@ import android.content.IntentSender;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -16,6 +18,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -45,14 +48,11 @@ import java.util.ArrayList;
 import itis.ru.homework4.R;
 import itis.ru.homework4.activities.LoginActivity;
 import itis.ru.homework4.activities.MainActivity;
-import itis.ru.homework4.server.Place;
-import itis.ru.homework4.server.PlaceAPI;
-import itis.ru.homework4.server.ServerBuilder;
 
 /**
  * Created by yasina on 06.03.16.
  */
-public class MapTaskFragment extends Fragment{
+public class MapTaskFragment extends Fragment implements GoogleMap.OnMarkerClickListener {
 
     private static final String TAG = "MainActivity";
 
@@ -60,6 +60,7 @@ public class MapTaskFragment extends Fragment{
     private OnFragmentInteractionListener mListener;
     private MapView mMapView;
     private GoogleMap googleMap;
+
 
     private class ViewHolder{
         RecyclerView rvComplaintList;
@@ -89,6 +90,10 @@ public class MapTaskFragment extends Fragment{
         mMapView = (MapView) view.findViewById(R.id.mapView);
         mMapView.onCreate(savedInstanceState);
 
+
+
+
+
         mMapView.onResume();// needed to get the map to display immediately
 
         try {
@@ -98,6 +103,7 @@ public class MapTaskFragment extends Fragment{
         }
 
         googleMap = mMapView.getMap();
+        googleMap.setOnMarkerClickListener(this);
         // latitude and longitude
         double latitude = 17.385044;
         double longitude = 78.486671;
@@ -157,6 +163,12 @@ public class MapTaskFragment extends Fragment{
     }
 
     @Override
+    public boolean onMarkerClick(Marker marker) {
+
+        return false;
+    }
+
+    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {
@@ -177,6 +189,20 @@ public class MapTaskFragment extends Fragment{
         void onFragmentInteraction(Uri uri);
     }
 
+    void bottomSHIT(){
+      /*  View bottomSheet = coordinatorLayout.findViewById(R.id.bottom_sheet);
+        BottomSheetBehavior behavior = BottomSheetBehavior.from(bottomSheet);
+        behavior.setBottomSheetCallback(new BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                // React to state change
+            }
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+                // React to dragging events
+            }
+        });*/
+    }
 
 
 }

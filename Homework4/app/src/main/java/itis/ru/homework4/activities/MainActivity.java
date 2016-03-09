@@ -42,9 +42,6 @@ import itis.ru.homework4.R;
 import itis.ru.homework4.fragments.MainFragment;
 import itis.ru.homework4.fragments.MapTaskFragment;
 import itis.ru.homework4.fragments.TabsFragment;
-import itis.ru.homework4.server.Place;
-import itis.ru.homework4.server.PlaceAPI;
-import itis.ru.homework4.server.ServerBuilder;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
@@ -67,11 +64,17 @@ public class MainActivity extends AppCompatActivity
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         mFragmentTransaction = getFragmentManager().beginTransaction();
-        replaceFragment(MainFragment.newInstance(),getResources().getString(R.string.navigator_drawer_item_main));
+        replaceFragment(MainFragment.newInstance(), getResources().getString(R.string.navigator_drawer_item_main));
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
+ FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Hello Snackbar", Snackbar.LENGTH_LONG).show();
+            }
+        });
     }
 
     @Override
