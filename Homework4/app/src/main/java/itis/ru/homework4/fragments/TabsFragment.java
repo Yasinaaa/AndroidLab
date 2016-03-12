@@ -1,36 +1,24 @@
 package itis.ru.homework4.fragments;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.LinearLayout;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import itis.ru.homework4.R;
 import itis.ru.homework4.adapter.PagerAdapter;
 import itis.ru.homework4.adapter.RecyclerViewAdapter;
-import itis.ru.homework4.listener.HidingScrollListener;
-import itis.ru.homework4.listener.TabsScrollListener;
-import itis.ru.homework4.model.Item;
 
 /**
  * Created by yasina on 06.03.16.

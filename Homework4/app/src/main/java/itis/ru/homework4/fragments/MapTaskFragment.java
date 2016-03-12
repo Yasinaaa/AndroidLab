@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+//import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
@@ -64,6 +65,7 @@ public class MapTaskFragment extends Fragment implements GoogleMap.OnMarkerClick
 
     private class ViewHolder{
         RecyclerView rvComplaintList;
+        CoordinatorLayout mCoordinatorLayout;
     }
 
     private ViewHolder vh;
@@ -122,6 +124,8 @@ public class MapTaskFragment extends Fragment implements GoogleMap.OnMarkerClick
                 .target(new LatLng(17.385044, 78.486671)).zoom(12).build();
         googleMap.animateCamera(CameraUpdateFactory
                 .newCameraPosition(cameraPosition));
+
+        bottomSHIT();
 
         // Perform any camera updates here
         return view;
@@ -190,9 +194,10 @@ public class MapTaskFragment extends Fragment implements GoogleMap.OnMarkerClick
     }
 
     void bottomSHIT(){
-      /*  View bottomSheet = coordinatorLayout.findViewById(R.id.bottom_sheet);
-        BottomSheetBehavior behavior = BottomSheetBehavior.from(bottomSheet);
-        behavior.setBottomSheetCallback(new BottomSheetCallback() {
+        vh.mCoordinatorLayout = (CoordinatorLayout) view.findViewById(R.id.coordinator_layout);
+        View bottomSheet = vh.mCoordinatorLayout.findViewById(R.id.bottom_sheet);
+        /*BottomSheetBehavior behavior = BottomSheetBehavior.from(bottomSheet);
+        behavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
                 // React to state change

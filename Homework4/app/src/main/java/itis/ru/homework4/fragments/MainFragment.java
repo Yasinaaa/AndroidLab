@@ -3,12 +3,7 @@ package itis.ru.homework4.fragments;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.IntentSender;
-import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -23,28 +18,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.DecelerateInterpolator;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdate;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.squareup.picasso.Downloader;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import itis.ru.homework4.R;
 import itis.ru.homework4.activities.MainActivity;
 import itis.ru.homework4.adapter.RecyclerViewAdapter;
-import itis.ru.homework4.listener.HidingScrollListener;
 import itis.ru.homework4.model.Item;
 
 /**
@@ -100,19 +80,6 @@ public class MainFragment extends Fragment implements RecyclerViewAdapter.OnItem
         vh.recyclerView = (RecyclerView) view.findViewById(R.id.list_recycler_view);
         vh.recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
 
-        vh.recyclerView.addOnScrollListener(new HidingScrollListener() {
-            @Override
-            public void onHide() {
-                hideViews();
-            }
-
-            @Override
-            public void onShow() {
-                showViews();
-            }
-        });
-
-
         vh.toolbar = (Toolbar) view.findViewById(R.id.toolbar);
         vh.toolbar.setTitle(getResources().getString(R.string.navigator_drawer_item_main));
         ((AppCompatActivity)getActivity()).setSupportActionBar(vh.toolbar);
@@ -124,6 +91,13 @@ public class MainFragment extends Fragment implements RecyclerViewAdapter.OnItem
             }
         });
 
+        vh.fab = (FloatingActionButton) view.findViewById(R.id.fab);
+        vh.fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Hello Snackbar", Snackbar.LENGTH_LONG).show();
+            }
+        });
        vh.toggle = new ActionBarDrawerToggle(
                 getActivity(), MainActivity.drawer, vh.toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         MainActivity.drawer.setDrawerListener(vh.toggle);
@@ -146,21 +120,10 @@ public class MainFragment extends Fragment implements RecyclerViewAdapter.OnItem
         mItemsList.add(new Item("Item9", "It was beautiful day!"));
 
         mRecyclerViewAdapter = new RecyclerViewAdapter(getActivity(), mItemsList);
+        mRecyclerViewAdapter.setOnItemClickListener(this);
         vh.recyclerView.setAdapter(mRecyclerViewAdapter);
     }
 
-    private void hideViews() {
-        vh.toolbar.animate().translationY(-vh.toolbar.getHeight()).setInterpolator(new AccelerateInterpolator(2));
-
-      /*  CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) vh.fab.getLayoutParams();
-        int fabBottomMargin = lp.bottomMargin;
-        vh.fab.animate().translationY(vh.fab.getHeight()+fabBottomMargin).setInterpolator(new AccelerateInterpolator(2)).start();*/
-    }
-
-    private void showViews() {
-        vh.toolbar.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
-       // vh.fab.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
-    }
 
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
@@ -190,10 +153,11 @@ public class MainFragment extends Fragment implements RecyclerViewAdapter.OnItem
     }
 
     @Override
-    public void onItemClick(View view, Item viewModel) {
-        FragmentManager fm = getFragmentManager();
-       // DialogFragment dialogFragment = RecyclerViewItemFragment.newInstance();
-        //dialogFragment.show(fm, "Sample Fragment");
+    public void onItemClick(Item v) {
+        Log.d(TAG, v.getTitle() + " is clicked");
+        FragmentManager fm = getActivity().getFragmentManager();
+        DialogFragment dialogFragment = RecyclerViewItemFragment.newInstance();
+        dialogFragment.show(fm, "Sample Fragment");
     }
 
 
