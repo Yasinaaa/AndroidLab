@@ -45,7 +45,6 @@ public class LoginActivity extends AppCompatActivity {
         // Set up the login form.
 
 
-        startActivity(new Intent(this, MainActivity.class));
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
 
 
