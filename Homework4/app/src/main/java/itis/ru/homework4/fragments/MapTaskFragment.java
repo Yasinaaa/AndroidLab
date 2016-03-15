@@ -148,7 +148,7 @@ public class MapTaskFragment extends Fragment implements GoogleMap.OnMarkerClick
 
     private void initView(){
         vh = new ViewHolder();
-        bottomSHIT();
+     //   bottomSHIT();
         mMapView = (MapView) view.findViewById(R.id.mapView);
 
 
@@ -187,7 +187,7 @@ public class MapTaskFragment extends Fragment implements GoogleMap.OnMarkerClick
         void onFragmentInteraction(Uri uri);
     }
 
-    void bottomSHIT(){
+   /* void bottomSHIT(){
         vh.mCoordinatorLayout = (CoordinatorLayout) view.findViewById(R.id.coordinator_layout);
         View bottomSheet = vh.mCoordinatorLayout.findViewById(R.id.bottom_sheet);
         vh.behavior = BottomSheetBehavior.from(bottomSheet);
@@ -205,7 +205,7 @@ public class MapTaskFragment extends Fragment implements GoogleMap.OnMarkerClick
             }
         });
 
-    }
+    }*/
 
 
 }
