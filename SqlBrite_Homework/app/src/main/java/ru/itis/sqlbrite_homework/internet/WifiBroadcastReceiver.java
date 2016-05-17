@@ -4,6 +4,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.nfc.Tag;
+import android.os.Bundle;
+import android.os.ResultReceiver;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -24,36 +26,21 @@ public class WifiBroadcastReceiver extends BroadcastReceiver {
 
     private final String TAG = "WifiBroadcastReceiver";
 
+    public static final int STATUS_FINISHED = 1;
+    public static final int STATUS_ERROR = 2;
+
     @Override
     public void onReceive(Context context, Intent intent) {
-        String status = NetworkUtil.getConnectivityStatusString(context);
-        Log.d(TAG, "status=" + status);
-        Toast.makeText(context, status, Toast.LENGTH_LONG).show();
 
-        if(status.equals(NetworkUtil.TYPE_WIFI)){
-            setPerson(context);
+        int status_id = NetworkUtil.getConnectivityStatus(context);
+        if(status_id == NetworkUtil.TYPE_WIFI){
+
+            MainActivity.receiver.send(STATUS_FINISHED, Bundle.EMPTY);
+        }else {
+            MainActivity.receiver.send(STATUS_ERROR, Bundle.EMPTY);
         }
     }
 
-    private void setPerson(Context mContext){
-        DatabaseHelper databaseHelper = new DatabaseHelper(mContext);
 
-        Subscription subscription = databaseHelper.getPeopleList()
-                .subscribeOn(Schedulers.io())
-                .subscribe(new Subscriber<List<Person>>() {
-                    @Override
-                    public void onCompleted() { }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.e(TAG, "There was an error getting the people " + e);
-                    }
-
-                    @Override
-                    public void onNext(List<Person> person) {
-                        Log.d(TAG, "person.size()=" + person.size());
-                    }
-                });
-    }
 
 }

@@ -44,28 +44,6 @@ public class DatabaseHelper {
                 });
     }
 
-    public Observable<List<Person>> getPeopleList() {
-        return mSqlBrite.createQuery(Db.TABLE_NAME, "SELECT * FROM " + Db.TABLE_NAME)
-                .flatMap(new Func1<Query, Observable<Cursor>>() {
-                    @Override
-                    public Observable<Cursor> call(Query query) {
-                        return ContentObservable.fromCursor(query.run());
-                    }
-                })/*.map(new Func1<Cursor, Person>() {
-                    @Override
-                    public Person call(Cursor cursor) {
-                        Log.d("SIZE", cursor.getCount() + "");
-                        return Db.parseCursor(cursor);
-                    }
-                })*/
-                .map(new Func1<Cursor, List<Person>>() {
-                    @Override
-                    public List<Person> call(Cursor cursor) {
-                        Log.d("SIZE", cursor.getCount() + "");
-                        return  Db.parseCursorList(cursor);
-                    }
-                });
-    }
 
     public Observable<Person> savePerson(final Person person) {
 
@@ -85,8 +63,11 @@ public class DatabaseHelper {
         return Observable.create(new Observable.OnSubscribe<Person>() {
             @Override
             public void call(Subscriber<? super Person> subscriber) {
-                long result = mSqlBrite.update(Db.TABLE_NAME, Db.toContentValues(person), newName);
-                Log.d(TAG,"result=" + result);
+                Log.d(TAG, "newName=" + newName);
+                Log.d(TAG, "person name=" + person.getName());
+
+                long result = mSqlBrite.update(Db.TABLE_NAME, Db.toContentValues(person), person.getName(), newName);
+                Log.d(TAG,"result =" + result);
                 if (result >= 0) subscriber.onNext(person);
                 subscriber.onCompleted();
             }
@@ -94,7 +75,6 @@ public class DatabaseHelper {
     }
 
     public Observable<Person> removePerson(final Person person) {
-
         return Observable.create(new Observable.OnSubscribe<Person>() {
             @Override
             public void call(Subscriber<? super Person> subscriber) {
